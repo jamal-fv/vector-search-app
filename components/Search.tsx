@@ -194,72 +194,82 @@ export default function Search({ databases }: SearchProps) {
   });
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-4">
-      <div className="space-y-2">
-        <select
-          value={selectedDB}
-          onChange={(e) => setSelectedDB(e.target.value)}
-          className="w-full p-2 border rounded-md"
-        >
-          <option value="">Select Database</option>
-          {databases.map((db) => (
-            <option key={db.name} value={db.name}>
-              {db.name}
-            </option>
-          ))}
-        </select>
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
+  
 
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Enter your search query..."
-            className="flex-1 p-2 border rounded-md"
-          />
-          <button
-            onClick={handleSearch}
-            disabled={loading || !query || !selectedDB}
-            className="px-4 py-2 bg-foreground text-background rounded-md disabled:opacity-50"
-          >
-            {loading ? "Searching..." : "Search"}
-          </button>
+      <div className="bg-white dark:bg-gray-100 rounded-lg shadow-sm p-6 mb-8 border">
+        <div className="grid gap-4 md:grid-cols-2 mb-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Database</label>
+            <select
+              value={selectedDB}
+              onChange={(e) => setSelectedDB(e.target.value)}
+              className="w-full p-2.5 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 
+                       transition-all dark:text-gray-900"
+            >
+              <option value="">Select Database</option>
+              {databases.map((db) => (
+                <option key={db.name} value={db.name}>{db.name}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium mb-2">Search Query</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Enter your search query..."
+                className="flex-1 p-2.5 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 
+                         transition-all dark:text-gray-900"
+              />
+              <button
+                onClick={handleSearch}
+                disabled={loading || !query || !selectedDB}
+                className="px-4 py-2 bg-foreground text-background rounded-md disabled:opacity-50"
+              >
+                {loading ? "Searching..." : "Search"}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
       {results.length > 0 && (
-        <div className="space-y-4 overflow-x-auto">
-          <h2 className="text-lg font-semibold">Results:</h2>
-          <table className="min-w-full border-collapse">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id} className="border p-2 bg-gray-50">
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="border p-2">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="bg-white dark:bg-gray-100 rounded-lg shadow-sm border">
+          <div className="p-4 border-b">
+            <h2 className="text-xl font-semibold dark:text-gray-900">Results</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-700">Found {results.length} matches</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 dark:bg-gray-200">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <th key={header.id} 
+                          className="px-4 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-900">
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody className="divide-y">
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id} className="hover:bg-gray-50 dark:hover:bg-gray-200">
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id} className="px-4 py-3 text-gray-800 dark:text-gray-900">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
