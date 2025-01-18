@@ -4,25 +4,10 @@ import Search from "../components/Search";
 
 const databases = [
   {
-    name: "Combined & Concatenated",
-    url: process.env.NEXT_PUBLIC_UPSTASH_DB_COMBINED_URL!,
-    token: process.env.NEXT_PUBLIC_UPSTASH_DB_COMBINED_TOKEN!,
-  },
-  {
-    name: "Categories Only",
-    url: process.env.NEXT_PUBLIC_UPSTASH_DB_CATEGORIES_URL!,
-    token: process.env.NEXT_PUBLIC_UPSTASH_DB_CATEGORIES_TOKEN!,
-  },
-  {
-    name: "Tags Only",
-    url: process.env.NEXT_PUBLIC_UPSTASH_DB_TAGS_URL!,
-    token: process.env.NEXT_PUBLIC_UPSTASH_DB_TAGS_TOKEN!,
-  },
-  {
-    name: "Images Only",
-    url: process.env.NEXT_PUBLIC_UPSTASH_DB_IMAGES_URL!,
-    token: process.env.NEXT_PUBLIC_UPSTASH_DB_IMAGES_TOKEN!,
-  },
+    name: "Local Database",
+    url: process.env.NEXT_PUBLIC_UPSTASH_DB_LOCAL_URL!,
+    token: process.env.NEXT_PUBLIC_UPSTASH_DB_LOCAL_TOKEN!,
+  }
 ];
 
 export default function Home() {
