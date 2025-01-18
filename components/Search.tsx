@@ -7,6 +7,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import Image from "next/image";
 
 interface SearchProps {
   databases: {
@@ -48,7 +49,7 @@ interface SearchResult {
   };
 }
 
-const createDynamicColumns = (results: SearchResult[]) => {
+const createDynamicColumns = () => {
   const columnHelper = createColumnHelper<SearchResult>();
   const columns = [];
 
@@ -69,10 +70,12 @@ const createDynamicColumns = (results: SearchResult[]) => {
           );
         } else if (isImage) {
           return (
-            <img
+            <Image
               src={url}
               alt="Result media"
-              className="max-w-[200px] max-h-[150px] object-contain"
+              width={200}
+              height={150}
+              className="object-contain"
             />
           );
         }
@@ -109,9 +112,8 @@ const createDynamicColumns = (results: SearchResult[]) => {
     "tags",
     "job_id",
     "media_type",
-    'source',
-    'labels'
-
+    "source",
+    "labels",
   ];
 
   // Add all metadata columns, even if they don't exist in current results
@@ -127,7 +129,7 @@ const createDynamicColumns = (results: SearchResult[]) => {
           header: key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " "),
           cell: (info) => {
             const value = info.getValue();
-            
+
             if (value === undefined || value === null) {
               return "N/A";
             }
@@ -167,7 +169,6 @@ const createDynamicColumns = (results: SearchResult[]) => {
 
 export default function Search({ databases }: SearchProps) {
   const [query, setQuery] = useState("");
-  const [selectedDB] = useState(databases[0]?.name || "");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [mediaType, setMediaType] = useState("all");
@@ -224,7 +225,7 @@ export default function Search({ databases }: SearchProps) {
     }
   };
 
-  const columns = useMemo(() => createDynamicColumns(results), [results]);
+  const columns = useMemo(() => createDynamicColumns(), []);
 
   const table = useReactTable({
     data: results,
@@ -267,9 +268,11 @@ export default function Search({ databases }: SearchProps) {
               ))}
             </select>
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium mb-2">Search Query</label>
+            <label className="block text-sm font-medium mb-2">
+              Search Query
+            </label>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -294,8 +297,12 @@ export default function Search({ databases }: SearchProps) {
       {results.length > 0 && (
         <div className="bg-white dark:bg-gray-100 rounded-lg shadow-sm border">
           <div className="p-4 border-b">
-            <h2 className="text-xl font-semibold dark:text-gray-900">Results</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-700">Found {results.length} matches</p>
+            <h2 className="text-xl font-semibold dark:text-gray-900">
+              Results
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-700">
+              Found {results.length} matches
+            </p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -303,9 +310,14 @@ export default function Search({ databases }: SearchProps) {
                 {table.getHeaderGroups().map((headerGroup) => (
                   <tr key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
-                      <th key={header.id} 
-                          className="px-4 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-900">
-                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      <th
+                        key={header.id}
+                        className="px-4 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-900"
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                       </th>
                     ))}
                   </tr>
@@ -313,10 +325,19 @@ export default function Search({ databases }: SearchProps) {
               </thead>
               <tbody className="divide-y">
                 {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id} className="hover:bg-gray-50 dark:hover:bg-gray-200">
+                  <tr
+                    key={row.id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-200"
+                  >
                     {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className="px-4 py-3 text-gray-800 dark:text-gray-900">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      <td
+                        key={cell.id}
+                        className="px-4 py-3 text-gray-800 dark:text-gray-900"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </td>
                     ))}
                   </tr>

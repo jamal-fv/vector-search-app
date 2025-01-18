@@ -7,7 +7,7 @@ const databases = [
     name: "Local Database",
     url: process.env.NEXT_PUBLIC_UPSTASH_DB_LOCAL_URL!,
     token: process.env.NEXT_PUBLIC_UPSTASH_DB_LOCAL_TOKEN!,
-  }
+  },
 ];
 
 export default function Home() {
